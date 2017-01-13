@@ -40,6 +40,58 @@ fn main() {
 	println!("{}", x.0);
 
 	assert_eq!(6, add(5,1));
+
+	let x = 5;
+
+	if x == 5 {
+	    println!("x is five!");
+	} else if x == 6 {
+	    println!("x is six!");
+	} else {
+	    println!("x is not five or six :(");
+	}
+
+	let y = if x == 5 { 10 } else { 15 };
+	println!("{}", y);
+
+	let mut done = false;
+	while !done {
+		println!("loop");
+		done = true;
+	}
+
+	for x in 0..10 {
+	    println!("{}", x);
+	}
+
+	for (index, value) in (5..10).enumerate() {
+	    println!("index = {} and value = {}", index, value);
+	}
+
+	let lines = "hello\nworld".lines();
+
+	for(n, line) in lines.enumerate(){
+		println!("{} : {}", n, line);
+	}
+
+	'loop1: loop{
+		'loop2: loop{
+			println!("loop infinite");
+			break 'loop1;
+		}
+	}
+
+	let v = vec![1, 2, 3, 4, 5];
+	println!("The third element of v is {}", v[2]);
+	match v.get(7) {
+	    Some(x) => println!("Item 7 is {}", x),
+	    None => println!("Sorry, this vector is too short.")
+	}
+
+	for i in &v {
+	    println!("This is a reference to {}", i);
+	}
+
 }
 
 //function
