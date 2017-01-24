@@ -92,6 +92,50 @@ fn main() {
 	    println!("This is a reference to {}", i);
 	}
 
+	//ownership
+	let v2 = v;
+	//println!("v[0] {}", v[0]);
+
+	let own = 1;
+	let own2 = own;
+	println!("{}", own);
+
+	fn sum_vec(v: &Vec<i32>) -> i32 {
+        return v.iter().fold(0, |a, &b| a + b);
+    }
+
+    // Borrow two vectors and sum them.
+    // This kind of borrowing does not allow mutation through the borrowed reference.
+    fn foo(v1: &Vec<i32>, v2: &Vec<i32>) -> i32 {
+        // Do stuff with `v1` and `v2`.
+        let s1 = sum_vec(v1);
+        let s2 = sum_vec(v2);
+        // Return the answer.
+        s1 + s2
+    }
+
+    let v1 = vec![1, 2, 3];
+    let v2 = vec![4, 5, 6];
+
+    let answer = foo(&v1, &v2);
+    println!("{}", answer);
+
+    let mut x = 5;
+	{
+	    let y = &mut x;
+	    *y += 1;
+	}
+	println!("{}", x);
+
+	/*one or more references (&T) to a resource,
+	exactly one mutable reference (&mut T).*/
+	//let y: &i32;
+	let x = 5;
+	let y: &i32;
+	y = &x;
+
+	println!("{}", y);
+
 }
 
 //function
