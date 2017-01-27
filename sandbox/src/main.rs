@@ -136,6 +136,39 @@ fn main() {
 
 	println!("{}", y);
 
+
+	//lifetimes
+	fn skip_prefix<'a, 'b>(line: &'a str, prefix: &'b str) -> &'a str {
+	    return line;
+	}
+
+	let line = "lang:en=Hello World!";
+	let lang = "en";
+
+	let v;
+	{
+	    let p = format!("lang:{}=", lang);  // -+ `p` comes into scope.
+	    v = skip_prefix(line, p.as_str());  //  |
+	}                                       // -+ `p` goes out of scope.
+	println!("{}", v);
+
+	struct Foo<'a> {
+	    x: &'a i32,
+	}
+
+	impl<'a> Foo<'a> {
+	    fn x(&self) -> &'a i32 { self.x }
+	}
+
+	fn main() {
+	    let y = &5; // This is the same as `let _y = 5; let y = &_y;`.
+	    let f = Foo { x: y };
+
+	    println!("{}", f.x);
+	}
+
+	let x: &'static str = "Hello, world.";
+
 }
 
 //function
