@@ -160,14 +160,54 @@ fn main() {
 	    fn x(&self) -> &'a i32 { self.x }
 	}
 
-	fn main() {
-	    let y = &5; // This is the same as `let _y = 5; let y = &_y;`.
-	    let f = Foo { x: y };
+    let y = &5; // This is the same as `let _y = 5; let y = &_y;`.
+    let f = Foo { x: y };
 
-	    println!("{}", f.x);
-	}
+    println!("{}", f.x);
 
 	let x: &'static str = "Hello, world.";
+
+	let mut x = 5;
+	//mutable binding to a mutable ref
+	let mut y = &mut x;
+
+	use std::cell::RefCell;
+
+	let x = RefCell::new(42);
+
+	let y = x.borrow_mut();
+	//let z = x.borrow_mut();
+
+	struct Point {
+	    x: i32,
+	    y: i32,
+	}
+
+	struct PointRef<'a> {
+	    x: &'a mut i32,
+	    y: &'a mut i32,
+	}
+
+	let mut point = Point { x: 0, y: 0 };
+
+    {
+        let r = PointRef { x: &mut point.x, y: &mut point.y };
+
+        *r.x = 5;
+        *r.y = 6;
+    }
+
+    assert_eq!(5, point.x);
+    assert_eq!(6, point.y);
+
+    point = Point { x: 0, ..point};
+    assert_eq!(6, point.y);
+
+    struct Color(i32, i32, i32);
+    let black = Color(17, 0, 0);
+    let Color(r, _, _) = black;
+
+    println!("{}", r);
 
 }
 
