@@ -209,6 +209,74 @@ fn main() {
 
     println!("{}", r);
 
+    enum Message {
+	    Quit,
+	    ChangeColor(i32, i32, i32),
+	    Move { x: i32, y: i32 },
+	    Write(String),
+	}
+
+	let v = vec!["Hello".to_string(), "World".to_string()];
+
+	let v1: Vec<Message> = v.into_iter().map(Message::Write).collect();
+
+	let x = 5;
+
+	match x {
+	    1 => println!("one"),
+	    2 => println!("two"),
+	    3 => println!("three"),
+	    4 => println!("four"),
+	    5 => println!("five"),
+	    6 | 7 => println!("six or seven"),
+	    _ => println!("something else"),
+	}
+
+	let number = match x {
+	    1 => "one",
+	    2 => "two",
+	    3 => "three",
+	    4 => "four",
+	    5 => "five",
+	    _ => "something else",
+	};
+
+	let message = Message::Quit;
+
+	match message {
+        Message::Quit => println!("quit"),
+        Message::ChangeColor(r, g, b) => println!("color"),
+        Message::Move { x, y: new_name_for_y } => println!("move"),
+        Message::Write(s) => println!("write"),
+    };
+
+    let x = 1;
+	let c = 'c';
+
+	match c {
+	    x => println!("x: {} c: {}", x, c),
+	}
+
+	println!("x: {}", x);
+
+	let origin = Point { x: 0, y: 0 };
+	let Point { x, y } = origin;
+
+	let tuple = (5, String::from("five"));
+	let (x, _) = tuple;
+	//string is not moved thanks to _
+	println!("Tuple is: {:?}", tuple);
+
+	let (x, ..) = tuple;
+
+	let mut x = 5;
+
+	match x {
+		ref name @ 1 ... 5 if *name < 5 => println!("one through four {}", name),
+		ref name @ 1 ... 5 if *name >= 5 => println!("five {}", name),
+	    ref mut mr => println!("Got a mutable reference to {}", mr),
+	}
+
 }
 
 //function
