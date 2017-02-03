@@ -349,7 +349,52 @@ fn main() {
                 .radius(2.0)
                 .finalize();;
     println!("{}", c.reference().area());
-	
+		
+	let greeting = "Hello there."; // greeting: &'static str
+	let mut s = "Hello".to_string(); // mut s: String
+	fn takes_slice(slice: &str) {
+	    println!("Got: {}", slice);
+	}
+
+    takes_slice(&s);
+
+    for c in s.chars() {
+	    print!("{}, ", c);
+	}
+
+	let c = s.chars().nth(0);
+
+    let sl = {
+    	let tmp = &s[0..5];
+    	println!("{}", tmp);
+    };
+    
+
+    let mut concat = s + "foo";
+    println!("{}", concat);
+    let concat2 = "bar".to_string() + &concat;
+    println!("{}", concat2);
+
+	let x: Option<i32> = Some(5);
+
+	fn takes_anything<T>(x: T) {
+	    // Do something with `x`.
+	}
+	takes_anything(concat2);
+
+	struct PointGeneric<T> {
+	    x: T,
+	    y: T,
+	}
+
+	impl<T> PointGeneric<T> {
+	    fn swap(&mut self) {
+	        std::mem::swap(&mut self.x, &mut self.y);
+	    }
+	}
+
+	let int_origin = PointGeneric { x: 0, y: 0 };
+	let float_origin = PointGeneric { x: 0.0, y: 0.0 };
 
 }
 
