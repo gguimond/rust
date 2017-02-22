@@ -396,6 +396,51 @@ fn main() {
 	let int_origin = PointGeneric { x: 0, y: 0 };
 	let float_origin = PointGeneric { x: 0.0, y: 0.0 };
 
+	trait HasArea {
+		fn area(&self) -> f64;
+		fn is_larger(&self, &Self) -> bool;
+	}
+
+	impl HasArea for Circle {
+		fn area(&self) -> f64 {
+			std::f64::consts::PI * (self.radius * self.radius)
+		}
+		fn is_larger(&self, other: &Self) -> bool {
+	        self.area() > other.area()
+	    }
+	}
+
+	use std::fmt::Debug;
+
+	fn print_area<T: HasArea>(shape: T) {
+	    println!("This shape has an area of {}", shape.area());
+	}
+
+	fn test <T: HasArea + Debug>(){
+
+	}
+
+	fn test2 <T>() where T : HasArea + Debug{
+		
+	}
+
+	let c = Circle {
+        x: 0.0f64,
+        y: 0.0f64,
+        radius: 1.0f64,
+    };
+
+    print_area(c);
+
+    trait bar : HasArea {
+	    fn is_valid(&self) -> bool;
+
+	    fn is_invalid(&self) -> bool { !self.is_valid() }
+	}
+
+	#[derive(Debug)]
+	struct deriving;
+
 }
 
 //function
