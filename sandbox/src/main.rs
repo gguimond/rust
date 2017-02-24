@@ -441,6 +441,35 @@ fn main() {
 	#[derive(Debug)]
 	struct deriving;
 
+	impl Drop for Circle {
+	    fn drop(&mut self) {
+	        println!("Dropping!");
+	    }
+	}
+
+	fn main() {
+	    let x = Circle { x: 0.0, y: 0.0, radius: 2.0 };
+
+	    // Do stuff.
+
+	}
+
+	let option: Option<i32> = Some(5);
+
+	match option {
+	    Some(x) => { println!("match!"); },
+	    None => {},
+	}
+
+	if option.is_some() {
+	    let x = option.unwrap();
+	    println!("match!");
+	}
+
+	if let Some(x) = option {
+	    println!("match!");
+	}
+
 }
 
 //function
