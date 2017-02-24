@@ -470,6 +470,40 @@ fn main() {
 	    println!("match!");
 	}
 
+	trait FooBar {
+	    fn method(&self) -> String;
+	}
+
+	impl FooBar for u8 {
+	    fn method(&self) -> String { format!("u8: {}", *self) }
+	}
+
+	impl FooBar for String {
+	    fn method(&self) -> String { format!("string: {}", *self) }
+	}
+
+	fn do_something<T: FooBar>(x: T) {
+	    x.method();
+	}
+
+	let x = 5u8;
+    let y = "Hello".to_string();
+
+	do_something(x);
+    do_something(y);
+
+    fn do_something2(x: &FooBar) {
+	    x.method();
+	}
+
+	let x = 5u8;
+    //casting
+    do_something2(&x as &FooBar);
+    //coercing
+    do_something2(&x);
+
+    
+
 }
 
 //function
