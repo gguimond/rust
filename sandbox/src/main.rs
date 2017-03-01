@@ -502,9 +502,72 @@ fn main() {
     //coercing
     do_something2(&x);
 
-    
+    let add = |x| x + 1;
+    println!("{}", add(2));
 
+    let mut num = 5;
+
+	{
+	    let mut add_num = |x: i32| num += x;
+
+	    add_num(5);
+	}
+
+	assert_eq!(10, num);
+
+	//move closure
+	let mut num = 5;
+
+	{
+	    let mut add_num = move |x: i32| num += x;
+
+	    add_num(5);
+	}
+
+	assert_eq!(5, num);
+
+	fn call_with_one<F>(closure : F) -> i32
+		where F: Fn(i32) -> i32{
+			closure(1)
+	}
+
+	let answer = call_with_one(|x| x + 2);
+	assert_eq!(3, answer);
+
+	fn call_with_one2(some_closure: &Fn(i32) -> i32) -> i32 {
+	    some_closure(1)
+	}
+
+	let answer = call_with_one2(&|x| x + 2);
+
+	assert_eq!(3, answer);
+
+	fn call_with_ref<F>(some_closure:F) -> i32
+	    where F: for<'a> Fn(&'a i32) -> i32 {
+
+	    let value = 0;
+	    some_closure(&value)
+	}
+
+	fn add_one(i: i32) -> i32 {
+	    i + 1
+	}
+	let f = add_one;
+
+	call_with_one2(&f);
+
+	fn factory() -> Box<Fn(i32) -> i32> {
+	    let num = 5;
+
+	    Box::new(move  |x| x + num)
+	}
+
+	let f = factory();
+
+	let answer = f(1);
+	assert_eq!(6, answer);
 }
+	
 
 //function
 /// assert_eq!(6, add(5,1));
