@@ -566,6 +566,30 @@ fn main() {
 
 	let answer = f(1);
 	assert_eq!(6, answer);
+
+	trait Foo2 {
+	    fn f(&self);
+	}
+
+	trait Bar2 {
+	    fn f(&self);
+	}
+
+	struct Baz;
+
+	impl Foo2 for Baz {
+	    fn f(&self) { println!("Baz’s impl of Foo"); }
+	}
+
+	impl Bar2 for Baz {
+	    fn f(&self) { println!("Baz’s impl of Bar"); }
+	}
+
+	let b = Baz;
+
+	Foo2::f(&b);
+	Bar2::f(&b);
+
 }
 	
 
