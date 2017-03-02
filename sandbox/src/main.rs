@@ -1,5 +1,8 @@
 //! # Rust practice
 
+extern crate phrases;
+pub use phrases::english::greetings::hello as hi;
+
 fn main() {
 	//variable
 	let (a,b) = (1,2);
@@ -590,6 +593,8 @@ fn main() {
 	Foo2::f(&b);
 	Bar2::f(&b);
 
+	println!("Hello in English: {}", phrases::english::greetings::hello());
+	println!("Hello in English: {}", hi());
 }
 	
 

@@ -1,7 +1,6 @@
 [package]
-name = "sandbox"
+name = "phrases"
 version = "0.1.0"
 authors = ["Guillaume Guimond <guimog@gmail.com>"]
 
 [dependencies]
-phrases = { path = "../phrases" }
