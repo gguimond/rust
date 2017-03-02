@@ -595,6 +595,39 @@ fn main() {
 
 	println!("Hello in English: {}", phrases::english::greetings::hello());
 	println!("Hello in English: {}", hi());
+
+	//inline, several memory address
+	//better than static
+	const TOTO: i32 = 12;
+
+	//same address for all use
+	static mut TOTO2: i32 = 12;
+	unsafe {
+		TOTO2 = 2;
+	}
+
+	#[test]
+	fn check() {
+	    assert_eq!(2, 1 + 1);
+	}
+
+	#[cfg(target_os = "macos")]
+	mod macos_only {
+
+	}
+
+	type mytype = String;
+
+	let s:mytype = "toto".to_string();	
+
+	use std::result;
+
+	enum ConcreteError {
+	    Foo,
+	    Bar,
+	}
+
+	type Result<T> = result::Result<T, ConcreteError>;
 }
 	
 
