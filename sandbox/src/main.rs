@@ -668,6 +668,30 @@ fn main() {
 
 	let graph = MyGraph;
 	let obj = Box::new(graph) as Box<Graph<N=Node, E=Edge>>;
+
+	struct FooUnsized<T: ?Sized> {
+	    f: T,
+	}
+
+	fn testUnsized(){
+		println!("unsized");
+	}
+
+	let mut fooUnsized = FooUnsized { f: testUnsized };
+
+	use std::ops::Add;
+
+	impl Add<i32> for Point {
+	    type Output = f64;
+
+	    fn add(self, rhs: i32) -> f64 {
+	        // Add an i32 to a Point and get an f64.
+	        50f64
+	    }
+	}
+
+	let xa: f64 = point +  2;
+	println!("{}", xa);
 }
 	
 
