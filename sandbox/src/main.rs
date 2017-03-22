@@ -705,6 +705,32 @@ fn main() {
 
 	// Therefore, this works:
 	borrow(&counted);
+
+	macro_rules! macroTest {
+	    (x => $e:expr) => (println!("mode X: {}", $e));
+	    (y => $e:expr) => (println!("mode Y: {}", $e));
+	}
+
+	macroTest! (x=>3);
+
+	macro_rules! macroTest2 {
+	    (x=> $($e:expr),*) => {{
+	    	let mut temp_vec = Vec::new();
+	    	$(
+	    		//println!("mode X: {}", $e)
+	    		temp_vec.push($e);
+	    	)*
+	   	}};
+	}
+
+	macroTest2!(x=>[3,4]);
+
+	let x: Option<i32> = None;
+
+	match x {
+	    Some(_) => unreachable!(),
+	    None => println!("I know x is None!"),
+	}
 }
 	
 
