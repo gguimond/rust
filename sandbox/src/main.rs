@@ -692,6 +692,19 @@ fn main() {
 
 	let xa: f64 = point +  2;
 	println!("{}", xa);
+
+	use std::rc::Rc;
+
+	fn borrow(s: &str) {
+	    // Borrow a string for a second.
+	}
+
+	// String implements Deref<Target=str>.
+	let owned = "Hello".to_string();
+	let counted = Rc::new(owned);
+
+	// Therefore, this works:
+	borrow(&counted);
 }
 	
 
