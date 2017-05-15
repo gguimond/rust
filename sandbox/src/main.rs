@@ -3,6 +3,24 @@
 extern crate phrases;
 pub use phrases::english::greetings::hello as hi;
 
+mod test;
+
+
+pub mod sandbox {	
+	//function
+	/// assert_eq!(6, add(5,1));
+	/// # fn add(x :i32, y :i32) -> i32{
+	/// #     x + y
+	/// # }
+	pub fn add(x :i32, y :i32) -> i32{
+		x + y
+	}
+
+	pub fn diverges() -> ! {
+	    panic!("This function never returns!");
+	}
+}
+
 fn main() {
 	//variable
 	let (a,b) = (1,2);
@@ -16,9 +34,9 @@ fn main() {
     x = "bar";
     println!("{}", x);
 
-    println!("{}", add(1,2));
+    println!("{}", sandbox::add(1,2));
 
-    let f: fn(i32, i32) -> i32 = add;
+    let f: fn(i32, i32) -> i32 = sandbox::add;
 
     println!("{}", f(1,2));
 
@@ -42,7 +60,7 @@ fn main() {
 	println!("{}", _x);
 	println!("{}", x.0);
 
-	assert_eq!(6, add(5,1));
+	assert_eq!(6, sandbox::add(5,1));
 
 	let x = 5;
 
@@ -744,18 +762,4 @@ fn main() {
 	unsafe{
 		let ref_raw = &*raw;
 	}
-}
-	
-
-//function
-/// assert_eq!(6, add(5,1));
-/// # fn add(x :i32, y :i32) -> i32{
-/// #     x + y
-/// # }
-fn add(x :i32, y :i32) -> i32{
-	x + y
-}
-
-fn diverges() -> ! {
-    panic!("This function never returns!");
 }
