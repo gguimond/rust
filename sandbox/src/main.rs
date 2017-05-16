@@ -1,5 +1,8 @@
 //! # Rust practice
-
+#![warn(missing_docs)]
+#![doc(html_logo_url = "https://www.rust-lang.org/logos/rust-logo-128x128-blk-v2.png",
+       html_favicon_url = "https://www.rust-lang.org/favicon.ico",
+       html_root_url = "https://doc.rust-lang.org/")]
 extern crate phrases;
 pub use phrases::english::greetings::hello as hi;
 
@@ -9,7 +12,21 @@ mod test;
 mod foo {
 }
 
+/// ```
+/// # #[macro_use] extern crate foo;
+/// # fn main() {
+/// macroTest! (x=>3);
+/// # }
+/// ```
+
+macro_rules! macroTest {
+    (x => $e:expr) => (println!("mode X: {}", $e));
+    (y => $e:expr) => (println!("mode Y: {}", $e));
+}
+
 pub mod sandbox {	
+	//! A module for sandbox.
+
 	//function
 	/// assert_eq!(6, add(5,1));
 	/// # fn add(x :i32, y :i32) -> i32{
@@ -19,9 +36,25 @@ pub mod sandbox {
 		x + y
 	}
 
+	/// Constructs a new `Rc<T>`.
+	///
+	/// # Examples
+	///
+	/// ```
+	/// use std::rc::Rc;
+	///
+	/// let five = Rc::new(5);
+	/// ```
 	pub fn diverges() -> ! {
 	    panic!("This function never returns!");
 	}
+
+	/// # Panics
+	fn test(){}
+	/// # Errors
+	fn test2(){}
+	/// # Safety
+	fn test3(){}
 }
 
 fn main() {
@@ -727,6 +760,13 @@ fn main() {
 	// Therefore, this works:
 	borrow(&counted);
 
+	/// ```
+	/// # #[macro_use] extern crate foo;
+	/// # fn main() {
+	/// macroTest! (x=>3);
+	/// # }
+	/// ```
+
 	macro_rules! macroTest {
 	    (x => $e:expr) => (println!("mode X: {}", $e));
 	    (y => $e:expr) => (println!("mode Y: {}", $e));
@@ -765,7 +805,7 @@ fn main() {
 	unsafe{
 		let ref_raw = &*raw;
 	}
-	
+
 	if cfg!(target_os = "macos") || cfg!(target_os = "ios") {
 	    println!("Think Different!");
 	}
