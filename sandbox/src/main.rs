@@ -5,6 +5,9 @@ pub use phrases::english::greetings::hello as hi;
 
 mod test;
 
+#[cfg(feature = "foo")]
+mod foo {
+}
 
 pub mod sandbox {	
 	//function
@@ -761,5 +764,9 @@ fn main() {
 
 	unsafe{
 		let ref_raw = &*raw;
+	}
+	
+	if cfg!(target_os = "macos") || cfg!(target_os = "ios") {
+	    println!("Think Different!");
 	}
 }
