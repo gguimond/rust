@@ -6,6 +6,8 @@
 extern crate phrases;
 pub use phrases::english::greetings::hello as hi;
 
+use std::thread;
+
 mod test;
 
 #[cfg(feature = "foo")]
@@ -857,4 +859,46 @@ fn main() {
     .filter(|&x| x % 3 == 0)
     .take(5)
     .collect::<Vec<i32>>();
+
+    let handle = thread::spawn(|| {
+        "Hello from a thread!"
+    });
+
+    println!("{}", handle.join().unwrap());
+
+    use std::sync::{Arc, Mutex, mpsc};
+    let data = Arc::new(Mutex::new(vec![1, 2, 3]));
+
+    for i in 0..3 {
+    	let data_ref = data.clone();
+        thread::spawn(move || {
+        	let mut data_ref = data_ref.lock().unwrap();
+            data_ref[0] += i;
+        });
+    }
+    use std::time::Duration;
+
+    thread::sleep(Duration::from_millis(50));
+
+
+    let data2 = Arc::new(Mutex::new(0));
+
+    // `tx` is the "transmitter" or "sender".
+    // `rx` is the "receiver".
+    let (tx2, rx2) = mpsc::channel();
+
+    for _ in 0..10 {
+        let (data, tx2) = (data2.clone(), tx2.clone());
+
+        thread::spawn(move || {
+            let mut data = data.lock().unwrap();
+            *data += 1;
+
+            tx2.send(()).unwrap();
+        });
+    }
+
+    for _ in 0..10 {
+        rx2.recv().unwrap();
+    }
 }
