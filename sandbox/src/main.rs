@@ -940,4 +940,29 @@ fn main() {
 	        snappy_validate_compressed_buffer(src.as_ptr(), src.len() as size_t) == 0
 	    }
 	}*/
+
+	use std::collections::HashMap;
+
+	let mut map = HashMap::new();
+	map.insert("Foo".to_string(), 42);
+
+	assert_eq!(map.get("Foo"), Some(&42));
+
+	use std::borrow::Borrow;
+	use std::fmt::Display;
+
+	fn foobis<T: Borrow<i32> + Display>(a: T) {
+	    println!("a is borrowed: {}", a);
+	}
+
+	let mut i = 5;
+
+	foobis(&i);
+	foobis(&mut i);
+
+	let s = "Hello".to_string();
+
+	fn foocxxc<T: AsRef<str>>(s: T) {
+	    let slice = s.as_ref();
+	}
 }
