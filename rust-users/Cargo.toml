@@ -1,0 +1,10 @@
+[package]
+name = "rust-users"
+version = "0.1.0"
+authors = ["Guillaume Guimond <guimog@gmail.com>"]
+
+[dependencies]
+nickel = "*"
+mongodb = "*"
+bson = "*"
+serde_json = "1.0"
