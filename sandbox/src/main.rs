@@ -983,4 +983,186 @@ fn main() {
 	    FrenchToast::hello_world();
 	    Waffles::hello_world();
 	}*/
+
+	// Searches `haystack` for the Unicode character `needle`. If one is found, the
+	// byte offset of the character is returned. Otherwise, `None` is returned.
+	fn find(haystack: &str, needle: char) -> Option<usize> {
+	    for (offset, c) in haystack.char_indices() {
+	        if c == needle {
+	            return Some(offset);
+	        }
+	    }
+	    None
+	}
+
+	let file_name = "foobar.rs";
+    match find(file_name, '.') {
+        None => println!("No file extension found."),
+        Some(i) => println!("File extension: {}", &file_name[i+1..]),
+    }
+
+    fn extension_explicit(file_name: &str) -> Option<&str> {
+    match find(file_name, '.') {
+	        None => None,
+	        Some(i) => Some(&file_name[i+1..]),
+	    }
+	}
+
+	fn map<F, T, A>(option: Option<T>, f: F) -> Option<A> where F: FnOnce(T) -> A {
+    match option {
+	        None => None,
+	        Some(value) => Some(f(value)),
+	    }
+	}
+
+	fn extension(file_name: &str) -> Option<&str> {
+	    find(file_name, '.').map(|i| &file_name[i+1..])
+	}
+
+	let filename : Option<&str> = extension("foobar.rs");
+	match filename {
+        None => println!("No file extension found."),
+        Some(ext) => println!("File extension 2 : {}", ext),
+    }
+
+    fn unwrap_or<T>(option: Option<T>, default: T) -> T {
+	    match option {
+	        None => default,
+	        Some(value) => value,
+	    }
+	}
+
+	assert_eq!(extension("foobar.csv").unwrap_or("rs"), "csv");
+	assert_eq!(extension("foobar").unwrap_or("rs"), "rs");
+
+	fn double_number1(number_str: &str) -> i32 {
+	    2 * number_str.parse::<i32>().unwrap()
+	}
+	let n: i32 = double_number1("10");
+    assert_eq!(n, 20);
+
+    use std::num::ParseIntError;
+
+    fn double_number(number_str: &str) -> result::Result<i32, ParseIntError> {
+	    number_str.parse::<i32>().map(|n| 2 * n)
+	}
+
+	match double_number("10") {
+        Ok(n) => assert_eq!(n, 20),
+        Err(err) => println!("Error: {:?}", err),
+    }
+
+    use std::env;
+
+    fn double_arg(mut argv: env::Args) -> result::Result<i32, String> {
+	    argv.nth(1)
+	        .ok_or("Please give at least one argument".to_owned())
+	        .and_then(|arg| arg.parse::<i32>().map_err(|err| err.to_string()))
+	        .map(|n| 2 * n)
+	}
+	match double_arg(env::args()) {
+        Ok(n) => println!("{}", n),
+        Err(err) => println!("Error: {}", err),
+    }
+
+    use std::fs::File;
+	use std::io::Read;
+	use std::path::Path;
+
+	fn file_double<P: AsRef<Path>>(file_path: P) -> result::Result<i32, String> {
+	    let mut file = try!(File::open(file_path).map_err(|e| e.to_string()));
+	    let mut contents = String::new();
+	    try!(file.read_to_string(&mut contents).map_err(|e| e.to_string()));
+	    let n = try!(contents.trim().parse::<i32>().map_err(|e| e.to_string()));
+	    Ok(2 * n)
+	}
+
+	match file_double("foobar") {
+        Ok(n) => println!("{}", n),
+        Err(err) => println!("Error: {}", err),
+    }
+
+    use std::io;
+	use std::num;
+    #[derive(Debug)]
+	enum CliError {
+	    Io(io::Error),
+	    Parse(num::ParseIntError),
+	}
+
+	use std::error;
+	use std::fmt;
+
+	impl fmt::Display for CliError {
+	    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+	        match *self {
+	            // Both underlying errors already impl `Display`, so we defer to
+	            // their implementations.
+	            CliError::Io(ref err) => write!(f, "IO error: {}", err),
+	            CliError::Parse(ref err) => write!(f, "Parse error: {}", err),
+	        }
+	    }
+	}
+
+	impl error::Error for CliError {
+	    fn description(&self) -> &str {
+	        // Both underlying errors already impl `Error`, so we defer to their
+	        // implementations.
+	        match *self {
+	            CliError::Io(ref err) => err.description(),
+	            CliError::Parse(ref err) => err.description(),
+	        }
+	    }
+
+	    fn cause(&self) -> Option<&error::Error> {
+	        match *self {
+	            // N.B. Both of these implicitly cast `err` from their concrete
+	            // types (either `&io::Error` or `&num::ParseIntError`)
+	            // to a trait object `&Error`. This works because both error types
+	            // implement `Error`.
+	            CliError::Io(ref err) => Some(err),
+	            CliError::Parse(ref err) => Some(err),
+	        }
+	    }
+	}
+
+	use std::error::Error;
+	fn file_double2<P: AsRef<Path>>(file_path: P) -> result::Result<i32, Box<Error>> {
+	    let mut file = try!(File::open(file_path));
+	    let mut contents = String::new();
+	    try!(file.read_to_string(&mut contents));
+	    let n = try!(contents.trim().parse::<i32>());
+	    Ok(2 * n)
+	}
+
+	match file_double2("foobar") {
+        Ok(n) => println!("{}", n),
+        Err(err) => println!("Error: {}", err),
+    }
+
+    impl From<io::Error> for CliError {
+	    fn from(err: io::Error) -> CliError {
+	        CliError::Io(err)
+	    }
+	}
+
+	impl From<num::ParseIntError> for CliError {
+	    fn from(err: num::ParseIntError) -> CliError {
+	        CliError::Parse(err)
+	    }
+	}
+
+	fn file_double3<P: AsRef<Path>>(file_path: P) -> result::Result<i32, CliError> {
+	    let mut file = try!(File::open(file_path));
+	    let mut contents = String::new();
+	    try!(file.read_to_string(&mut contents));
+	    let n: i32 = try!(contents.trim().parse());
+	    Ok(2 * n)
+	}
+
+	match file_double3("foobar") {
+        Ok(n) => println!("{}", n),
+        Err(err) => println!("Error: {}", err),
+    }
+
 }
